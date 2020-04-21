@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <!-- 命名空间可以任意命名但是不能重复 -->
+<mapper namespace="com.mybatis.mapper.StaffMapper">
+
+	<!-- 查询员工 -->
+  <select id="selectOne" resultType="com.mybatis.entity.Staff">
+    select * from staff where id = #{id}
+  </select>
+  
+  <!-- 查询所有员工 -->
+  <select id="selectAllStaff" resultType="com.mybatis.entity.Staff">
+  	select id,name,gender from staff
+  </select>
+  
+ 	 <!-- 添加一个员工 -->
+  <insert id="addOneStaff" parameterType="com.mybatis.entity.Staff">
+  	insert into staff (name,gender) values(#{name},#{gender})
+  </insert>
+  
+  <!-- 删除员工 -->
+  <delete id="deleteSome" parameterType="java.lang.Integer">
+  	delete from staff where id != #{id}
+  </delete>
+  
+  <!-- 修改员工信息 -->
+  <update id="updateOne" parameterType="com.mybatis.entity.Staff">
+  	update staff set name = #{name} where id = #{id} 
+  </update>
+  
+</mapper>
