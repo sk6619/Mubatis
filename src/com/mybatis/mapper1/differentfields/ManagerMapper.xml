@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 命名空间可以任意命名但是不能重复 -->
+<mapper
+	namespace="com.mybatis.mapper1.differentfields.ManagerMapper">
+
+	<!-- 增加一条数据 ,返回主键 -->
+	<insert id="insertOne" parameterType="manager">
+		<selectKey resultType="int" keyProperty="id" order="AFTER">
+			select id
+			from manager order by id desc limit 1
+		</selectKey>
+		insert into manager (m_name,m_gender) values (#{name},#{gender})
+	</insert>
+
+	<!-- 增加多条数据 -->
+	<insert id="insertList" parameterType="list" useGeneratedKeys="true" keyProperty="id">
+		insert into manager (m_name,m_gender) values
+		<foreach item="manager" collection="list" separator=",">
+			(#{manager.name},#{manager.gender})
+		</foreach>
+	</insert>
+	
+	<!-- 查询所有数据 -->
+	<!-- <select id="selectAll" resultType="manager">
+		select id,
+		m_name   as name,
+		m_gender as gender 
+		from manager
+	</select> -->
+   <resultMap type="manager" id="managerMap">
+   		<id property="id" column="id"/>
+   		<result property="name" column="m_name"/>
+   		<result property="gender" column="m_gender"/>
+   </resultMap>
+   <select id="selectAll" resultMap="managerMap">
+   		select id,m_name,m_gender from manager
+   </select>
+   <!-- 查询一条数据 -->
+   <select id="selectOne"  resultMap="managerMap">
+   		select id,m_name,m_gender from manager where m_name=#{name} and id=#{id}
+   </select>
+   <!-- 通过id和姓名修改性别  map封装的key为id和name-->
+   <update id="updatGenderByIdAndName">
+   		update manager set m_gender=#{gender} where id=#{map.id} and m_name=#{map.name}
+   </update>
+   <!-- //通过id或者性别删除 map封装的key为1和2-->
+   <delete id="deleteByIdOrgender">
+   		delete from manager where id=#{map.id} or m_gender=#{map.gender}
+   </delete>
+   
+</mapper>

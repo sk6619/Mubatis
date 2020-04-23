@@ -17,6 +17,7 @@ import org.junit.Test;
 
 import com.mybatis.entity.Staff;
 import com.mybatis.mapper.StaffMapper;
+import com.mysql.cj.x.protobuf.MysqlxCrud.Insert;
 
 /**
  * 不使用xml创建SqlsessionFactory
@@ -46,6 +47,31 @@ public class JavaCodeSqlsessionFactory {
 		StaffMapper staffMapper = sqlSession.getMapper(StaffMapper.class);
 		Staff staff = staffMapper.selectOne(1);
 		System.out.println(staff);
+		sqlSession.close();
+	}
+
+	// 根据id 和名字查询
+
+	@Test
+	public void test2() {
+		SqlSession sqlSession = getSqlSession();
+		StaffMapper staffMapper = sqlSession.getMapper(StaffMapper.class);
+		Staff staff1 = staffMapper.seleStaffByIdAndName(1,"邵洁");
+		System.out.println(staff1);
+		sqlSession.close();
+	}
+
+	// 添加员工,测试返回主键
+	@Test
+	public void testInsert() {
+		SqlSession sqlSession = getSqlSession();
+		Staff staff = new Staff();
+		staff.setName("张三");
+		staff.setGender("男");
+		StaffMapper staffMapper = sqlSession.getMapper(StaffMapper.class);
+		staffMapper.addOneStaff(staff);
+		System.out.println(staff.getId());
+		sqlSession.commit();
 		sqlSession.close();
 	}
 

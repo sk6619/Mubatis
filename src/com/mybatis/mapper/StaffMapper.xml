@@ -4,12 +4,13 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
   <!-- 命名空间可以任意命名但是不能重复 -->
 <mapper namespace="com.mybatis.mapper.StaffMapper">
-
 	<!-- 查询员工 -->
   <select id="selectOne" resultType="com.mybatis.entity.Staff">
     select * from staff where id = #{id}
   </select>
-  
+  <select id="seleStaffByIdAndName" resultType="com.mybatis.entity.Staff">
+   select id,name,gender from staff where id=#{id} and name=#{name1}
+  </select>
   <!-- 查询所有员工 -->
   <select id="selectAllStaff" resultType="com.mybatis.entity.Staff">
   	select id,name,gender from staff
@@ -17,7 +18,10 @@
   
  	 <!-- 添加一个员工 -->
   <insert id="addOneStaff" parameterType="com.mybatis.entity.Staff">
-  	insert into staff (name,gender) values(#{name},#{gender})
+  		<selectKey order="AFTER" keyProperty="id" resultType="int">
+  		 select LAST_INSERT_ID()
+  		</selectKey>
+  		insert into staff (name,gender) values(#{name},#{gender})
   </insert>
   
   <!-- 删除员工 -->
