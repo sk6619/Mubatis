@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ <mapper namespace="com.mybatis.onetomany.mapper.BlogMapper">
+ <!-- 查询所有blog -->
+ 	<resultMap type="blog" id="blogMap">
+ 		<id column="blog_id" property="id"/>
+		<result column="blog_name" property="name"/>
+		<result column="author_id" property="author.id"/>
+ 	</resultMap>
+ 	<select id="selectBlogs" resultMap="blogMap">
+		select 
+		blog_id,
+		blog_name,  
+		author_id
+		from 
+		tb_blog
+	</select>
+	<!-- 查询blogs的同时把author查出来（结果集嵌套） -->
+	<resultMap type="blog" id="blogsAndAuthor">
+		<id column="blog_id" property="id"/>
+		<result column="blog_name" property="name"/>
+		<association property="author">
+			<id column="author_id" property="id"/>
+			<result column="author_name" property="name"/>
+		</association>
+	</resultMap>
+	<select id="selectBlogsAndAuthorByResultNest" resultMap="blogsAndAuthor">
+		select
+		A.blog_id			as blog_id,
+		A.blog_name			as blog_name,
+		B.author_id			as author_id,
+		B.author_name		as author_name
+		from
+		tb_author			as B
+		left join tb_blog   as A
+		on A.author_id=B.author_id
+	</select>
+	<!-- 查询blogs的同时把author查出来（select嵌套） -->
+	<resultMap type="blog" id="SelectNest">
+		<id column="blog_id" property="id"/>
+		<result column="blog_name" property="name"/>
+		<association property="author" column="author_id" select="selectAllAuthor"/>
+	</resultMap>
+	<select id="selectBlogsAndAuthorBySelectNest" resultMap="SelectNest">
+		select 
+		blog_id,
+		blog_name,  
+		author_id
+		from 
+		tb_blog
+		where author_id=#{id}
+	</select>
+	<select id="selectAllAuthor" resultType="author">
+		select 
+		author_id  			as id,
+		author_name 		as name
+		from tb_author
+		where author_id=#{id}
+	</select>
+ </mapper>

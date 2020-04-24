@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mybatis.onetomany.mapper.AuthorMapper">
+	<!-- 查询所有的author -->
+	<select id="selectAllAuthor" resultType="author">
+		select 
+		author_id  			as id,
+		author_name 		as name
+		from tb_author
+	</select>
+	<!-- 通过名字查询author -->
+	<select id="selectByName" resultType="author" parameterType="string">
+		select 
+		author_id 		 	as id,
+		author_name  		as name
+		from tb_author
+		where author_name=#{name}
+	</select>
+	<!-- 查询所有的author数据和他们的blog 
+	集合结果嵌套：防止n+1查询和延迟加载带来的性能问题-->
+	<resultMap type="author" id="AuthorAndBlogMap">
+		<id column="author_id" property="id"/>
+		<result column="author_name" property="name"/>
+		<collection property="list" javaType="arraylist" ofType="blog">
+			<id column="blog_id" property="id"/>
+			<result column="blog_name" property="name"/>
+			<result column="author_id" property="author.id"/>
+		</collection>
+	</resultMap>
+	<select id="selectAuthorsAndBlogs" resultMap="AuthorAndBlogMap">
+		select 
+		A.author_id        as author_id,
+		A.author_name	   as author_name,
+		B.blog_id		   as blog_id,
+		B.blog_name		   as blog_name
+		from tb_author 		as A
+		inner join tb_blog 	as B
+		on A.author_id=B.author_id
+	</select>
+	<!-- 查询所有的author数据和他们的blog(集合嵌套结果映射，可重用resultmap)
+	集合嵌套结果查询（防止n+1和延迟加载带来的性能问题） -->
+	<resultMap type="author" id="authorMap">
+		<id column="author_id" property="id"/>
+		<result column="author_name" property="name"/>
+		<collection property="list" ofType="blog" resultMap="blogMap"/>
+	</resultMap>
+	<resultMap type="blog" id="blogMap">
+		<id column="blog_id" property="id"/>
+		<result column="blog_name" property="name"/>
+		<result column="author_id" property="author.id"/>
+	</resultMap>
+	<select id="selectAuthorsAndBlogsResuing" resultMap="authorMap">
+		select 
+		A.author_id        as author_id,
+		A.author_name	   as author_name,
+		B.blog_id		   as blog_id,
+		B.blog_name		   as blog_name
+		from tb_author 		as A
+		left join tb_blog 	as B
+		on A.author_id=B.author_id
+	</select>
+	<!-- 查询所有的author数据和他们的blog,集合的嵌套select查询
+	会产生N+1问题 -->
+	<resultMap type="author" id="AuthorBlogNestSelect">
+		<id column="author_id" property="id"/>
+		<result column="author_name" property="name"/>
+		<collection property="list" column="author_id" ofType="blog" select="selectBlogs">
+			<id column="blog_id" property="id"/>
+			<result column="blog_name" property="name"/>
+		</collection>
+	</resultMap>
+	<select id="selectAuthorsNestSelect" resultMap="AuthorBlogNestSelect" >
+		select
+		author_id,
+		author_name
+		from
+		tb_author
+		where author_id=#{id}
+	</select>
+	<select id="selectBlogs" resultType="blog">
+		select 
+		blog_id				as id,
+		blog_name			as name,  
+		author_id
+		from 
+		tb_blog
+		where author_id=#{id}
+	</select>
+	<!-- 添加author -->
+	<insert id="insertAuthors" parameterType="list" useGeneratedKeys="true" keyProperty="id">
+		insert into tb_author (author_name) values
+		<foreach collection="list" item="author" separator=",">
+			(#{author.name})
+		</foreach>
+	</insert>
+  
+</mapper>
