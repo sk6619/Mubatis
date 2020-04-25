@@ -2,6 +2,7 @@ package com.mybatis.onetomany.mapper;
 
 import java.util.List;
 
+
 import com.mybatis.onetomany.entity.Author;
 
 /**
@@ -24,4 +25,6 @@ public interface AuthorMapper {
 	
 	//添加author
 	public void insertAuthors(List<Author> list);
+	//添加一个author
+	public void insertAuthor(Author author);
 }

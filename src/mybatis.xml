@@ -6,6 +6,12 @@
 <!-- 可以引入其他配置，此处主要配置datasource
 	类路径下采用resource，usl表示外部文件 -->
  <properties resource="jdbc.properties"></properties>
+ <settings>
+	<!-- 开启二级缓存 ，实际上默认开启的-->
+	<setting name="cacheEnabled" value="true" />
+	<!-- 开启打印SQL语句测试缓存 -->
+	<setting name="logImpl" value="STDOUT_LOGGING" />
+ </settings>
  <typeAliases>
  	<typeAlias type="com.mybatis.entity.Manager"/>
  	<typeAlias type="com.mybatis.onetomany.entity.Author"/>

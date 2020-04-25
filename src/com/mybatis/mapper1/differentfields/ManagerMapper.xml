@@ -3,9 +3,8 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <!-- 命名空间可以任意命名但是不能重复 -->
-<mapper
-	namespace="com.mybatis.mapper1.differentfields.ManagerMapper">
-
+<mapper namespace="com.mybatis.mapper1.differentfields.ManagerMapper">
+<cache></cache>
 	<!-- 增加一条数据 ,返回主键 -->
 	<insert id="insertOne" parameterType="manager">
 		<selectKey resultType="int" keyProperty="id" order="AFTER">

@@ -1,5 +1,6 @@
 package com.mybatis.onetomany.entity;
 
+import java.io.Serializable;
 import java.util.List;
 
 import org.apache.ibatis.type.Alias;
@@ -10,8 +11,9 @@ import org.apache.ibatis.type.Alias;
  *
  */
 @Alias("author")
-public class Author {
+public class Author implements Serializable{
 	
+	private static final long serialVersionUID = 1L;
 	private int id;
 	private String name;
 	private List<Blog> list;
