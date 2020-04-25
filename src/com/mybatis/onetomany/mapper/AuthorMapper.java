@@ -20,9 +20,10 @@ public interface AuthorMapper {
 	public List<Author> selectAuthorsAndBlogsResuing();
 	//查询所有的author数据和他们的blog,集合的嵌套select查询byauthor_id
 	public List<Author> selectAuthorsNestSelect(int id);
-	//根据姓名查询author
-	public Author selectByName(String name);
-	
+	//根据姓名查询，或者根据姓名和id一起查询author  if标签
+	public Author selectByNameOrId(Author author);
+	//如过传入了id就按id查找，如果传入了name就按照name查找    choose when otherwise
+	public Author selectAuthorIfIdORIfName(Author author);
 	//添加author
 	public void insertAuthors(List<Author> list);
 	//添加一个author

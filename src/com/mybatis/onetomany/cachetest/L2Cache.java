@@ -92,15 +92,23 @@ public class L2Cache {
 		sqlSession2.close();
 	}
 
+	//关联查询
 	@Test
 	public void testL2Cache3() throws IOException {
-		SqlSession sqlSession1 = getSqlsession();
-		AuthorMapper mapper1 = sqlSession1.getMapper(AuthorMapper.class);
-		List<Author> list1 = mapper1.selectAllAuthor();
-		for (Author author : list1) {
+		SqlSession sqlSession = getSqlsession();
+		AuthorMapper mapper = sqlSession.getMapper(AuthorMapper.class);
+		List<Author> list = mapper.selectAuthorsAndBlogsResuing();
+		for (Author author : list) {
 			System.out.println(author);
 		}
-		sqlSession1.close();
+		sqlSession.close();
+		sqlSession = getSqlsession();
+		mapper = sqlSession.getMapper(AuthorMapper.class);
+		list = mapper.selectAuthorsAndBlogsResuing();
+		for (Author author : list) {
+			System.out.println(author);
+		}
+		sqlSession.close();
 	}
 
 }

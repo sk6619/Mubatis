@@ -13,13 +13,34 @@
 		author_name 		as name
 		from tb_author
 	</select>
-	<!-- 通过名字查询author -->
-	<select id="selectByName" resultType="author" parameterType="string">
+	<!-- 根据姓名查询，或者根据姓名和id一起查询author -->
+	<select id="selectByNameOrId" resultType="author" parameterType="author">
 		select 
 		author_id 		 	as id,
 		author_name  		as name
 		from tb_author
-		where author_name=#{name}
+		where author_name=#{name} 
+		<if test="id != 0">
+			and author_id=#{id}
+		</if>
+	</select>
+	<!-- 如过传入了id就按id查找，如果传入了name就按照name查找   -->
+	<select id="selectAuthorIfIdORIfName" resultType="author">
+		select 
+		author_id 		 	as id,
+		author_name  		as name
+		from tb_author
+		<choose>
+			<when test="id != 0">
+				where author_id=#{id}
+			</when>
+			<when test="name != null">
+				where author_name=#{name}
+			</when>
+			<otherwise>
+				where author_id=100
+			</otherwise>
+		</choose>
 	</select>
 	<!-- 查询所有的author数据和他们的blog 
 	集合结果嵌套：防止n+1查询和延迟加载带来的性能问题-->
