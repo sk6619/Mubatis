@@ -6,5 +6,6 @@
 	<classpathentry kind="lib" path="E:/Jar/Junit/hamcrest-core-1.3.jar"/>
 	<classpathentry kind="lib" path="E:/Jar/Junit/junit-4.13.jar"/>
 	<classpathentry kind="lib" path="E:/Jar/jdbc/mysql-connector-java-8.0.19/mysql-connector-java-8.0.19.jar"/>
+	<classpathentry kind="lib" path="E:/Jar/Mybatis/mybatis-generator-core-1.3.5.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

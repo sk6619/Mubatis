@@ -33,5 +33,6 @@
     <mapper resource="com/mybatis/mapper1/differentfields/ManagerMapper.xml"/>
   	<mapper resource="com/mybatis/onetomany/mapper/AuthorMapper.xml"/>
   	<mapper resource="com/mybatis/onetomany/mapper/BlogMapper.xml"/>
+  	<mapper resource="com/reverseengineering/mapper/TbReverseMapper.xml"/>
   </mappers>
 </configuration>
